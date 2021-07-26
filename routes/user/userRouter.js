@@ -3,6 +3,8 @@ const router = express.Router();
 
 const { signup, login } = require("./controller/userController");
 
+const jwtMiddleware = require("../utils/jwtMiddleware");
+
 const checkIsUndefined = require("./helpers/checkIsUndefined");
 
 const checkIsEmptyFunc = require("./helpers/checkIsEmptyFunc");
@@ -14,7 +16,6 @@ const {
   checkIsAlphaFunc,
   checkIsAlphanumericFunc,
 } = require("./helpers/authMiddleware");
-const { checkIsEmpty, checkIsStrongPassword } = require("../utils/authMethods");
 
 router.post(
   "/sign-up",
@@ -27,6 +28,12 @@ router.post(
   signup
 );
 
-router.post("/login", checkIsUndefined, checkIsEmpty, checkIsEmailFunc, login);
+router.post(
+  "/login",
+  checkIsUndefined,
+  checkIsEmptyFunc,
+  checkIsEmailFunc,
+  login
+);
 
 module.exports = router;
