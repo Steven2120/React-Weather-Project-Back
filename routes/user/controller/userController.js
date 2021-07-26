@@ -37,7 +37,7 @@ async function login(req, res) {
   }
 
   try {
-    let foundUser = await User.findOne({ email: emai });
+    let foundUser = await User.findOne({ email: email });
 
     if (!foundUser) {
       res.status(400).json({
