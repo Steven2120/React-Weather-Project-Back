@@ -71,4 +71,32 @@ async function login(req, res) {
   }
 }
 
-module.exports = { signup, login };
+async function updateUser(req, res, next) {
+  console.log(req.body);
+
+  //REHASHES PASSWORD AFTER USER UPDATES THEIR PASSWORD
+  if (req.body.password) {
+    let salt = await bcrypt.genSalt(12);
+    let hashedPassword = await bcrypt.hash(req.body.password, salt);
+
+    req.body.password = hashedPassword;
+  }
+
+  try {
+    let updatedUser = await User.findOneAndUpdate(
+      { email: res.locals.decodedJwt.email },
+      req.body,
+      { new: true }
+    );
+
+    if (req.body.password) {
+      res.status(202).json({ message: "Success", payload: updatedUser });
+    } else {
+      res.json({ message: "success", payload: updatedUser });
+    }
+  } catch (e) {
+    next(e);
+  }
+}
+
+module.exports = { signup, login, updateUser };

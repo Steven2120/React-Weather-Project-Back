@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
-const { signup, login } = require("./controller/userController");
+const { signup, login, updateUser } = require("./controller/userController");
 
 const jwtMiddleware = require("../utils/jwtMiddleware");
 
@@ -35,5 +35,7 @@ router.post(
   checkIsEmailFunc,
   login
 );
+
+router.put("/update-user-profile", jwtMiddleware, updateUser);
 
 module.exports = router;
